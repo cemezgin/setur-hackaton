@@ -13,14 +13,14 @@ class BookingComAdapter implements AdapterInterface
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => 'fa5c1b9057mshe2093f11fc2ba33p16afa2jsnc5b2dae9572c'
+            'x-rapidapi-key' => 'd5f1d1627amshd9a9747193e87c5p16a106jsne6b39caf8449'
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/locations', [
             'locale' => 'en-gb',
             'name' => $searchQuery,
         ]);
 
         if ($response->failed()) {
-            throw new \Exception('Failed on fetch booking.com provider');
+            return $response->json();
         } else {
             $this->response = $response;
             return $this->prepareForMatch($checkin, $checkout, $adults);
@@ -81,7 +81,7 @@ class BookingComAdapter implements AdapterInterface
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => 'fa5c1b9057mshe2093f11fc2ba33p16afa2jsnc5b2dae9572c'
+            'x-rapidapi-key' => 'd5f1d1627amshd9a9747193e87c5p16a106jsne6b39caf8449'
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/search', [
             'units' => 'metric',
             'order_by' => 'popularity',

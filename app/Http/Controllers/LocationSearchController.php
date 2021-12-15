@@ -6,6 +6,7 @@ use App\Services\Adapter\BookingComAdapter;
 use App\Services\Adapter\HotelsComAdapter;
 use App\Services\PriceSelector;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\fileExists;
 
 class LocationSearchController extends Controller
 {
@@ -15,6 +16,11 @@ class LocationSearchController extends Controller
             'bookingcom' => BookingComAdapter::class,
             'hotelscom' => HotelsComAdapter::class,
         ];
+        $hashUri = hash("md5", $request->getUri());
+        if(file_exists($_SERVER['DOCUMENT_ROOT']."/".$hashUri.".json")) {
+            $string = file_get_contents($_SERVER['DOCUMENT_ROOT']."/".$hashUri.".json");
+            return response()->json(json_decode($string,true));
+        }
 
         foreach ($providers as $name => $provider) {
             $selector = new PriceSelector(new $provider);
@@ -41,6 +47,8 @@ class LocationSearchController extends Controller
                 array_push($res[$key], $prc);
             }
         }
+
+        file_put_contents($_SERVER['DOCUMENT_ROOT']."/".$hashUri.".json",json_encode($res));
         return response()->json($res);
     }
 }
