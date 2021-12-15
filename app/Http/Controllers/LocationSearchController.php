@@ -25,19 +25,21 @@ class LocationSearchController extends Controller
         $res = array_merge_recursive($locationList['bookingcom'], $locationList['hotelscom']);
         foreach ($res as $key => $item) {
             if (isset($item['detail'])) {
-                $bestPrice = 0;
+                $bestOldPrice = 100000000;
                 foreach ($item['detail'] as $provider => $priceItem) {
-                    $firstPrice = $priceItem['total_price'];
-                    if ($firstPrice < $bestPrice) {
-                        $bestPrice = $firstPrice;
+                    $bestPrice = $priceItem['total_price'];
+                    if ($bestPrice < $bestOldPrice) {
+                        $bestOldPrice = $bestPrice;
+                        $selected = $provider;
                     }
                     $prc = [
-                        'price' => $bestPrice,
-                        'provider' => $provider
+                        'price' => $bestOldPrice,
+                        'provider' => $selected
                     ];
                 }
+
+                array_push($res[$key], $prc);
             }
-            array_push($res[$key], ['best_price' => $prc]);
         }
         return response()->json($res);
     }
