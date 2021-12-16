@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class LocationSearchController extends Controller
 {
+    public const KEY = '238fc7e70amsh4ce2c09ab0985c4p1ab59bjsnd34031e92aef';
     public function locationSearchAction(Request $request)
     {
         $providers = [
@@ -43,7 +44,17 @@ class LocationSearchController extends Controller
                     ];
                 }
 
-                array_push($res[$key], $prc);
+                array_push($res[$key]['detail'], $prc);
+                foreach ($res[$key]['detail'] as $prov => $priceDetail) {
+                    if ($prov != "0") {
+                       if($prov == $res[$key]['detail'][0]['provider']) {
+                           $res[$key]['detail'][$prov]['best'] = true;
+                           continue;
+                       }
+                    }
+                }
+
+                unset($res[$key]['detail'][0]);
             }
         }
         if($res != []) {

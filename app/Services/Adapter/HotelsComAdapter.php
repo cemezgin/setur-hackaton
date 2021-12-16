@@ -2,17 +2,17 @@
 
 namespace App\Services\Adapter;
 
+use App\Http\Controllers\LocationSearchController;
 use Illuminate\Support\Facades\Http;
 
 class HotelsComAdapter implements AdapterInterface
 {
     private $response;
-    const HOTELS_KEY = '593306b5d1mshdb24b1868312486p10efaejsne3c42c137c35';
     public function locationAPIProvider(string $searchQuery, $checkin, $checkout, $adults)
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
-            'x-rapidapi-key' => self::HOTELS_KEY
+            'x-rapidapi-key' => LocationSearchController::KEY
         ])->get('https://hotels-com-provider.p.rapidapi.com/v1/destinations/search', [
             'locale' => 'en_US',
             'currency' => 'EUR',
@@ -51,6 +51,7 @@ class HotelsComAdapter implements AdapterInterface
                         'locationId' => ['hotelscom' => $entity['destinationId']],
                         'latitude' => round($entity['latitude'], 2),
                         'longitude' => round($entity['longitude'],2),
+                        'image_url' => $this->getImage($entity['destinationId']),
                         'detail' => $this->hotelSearchProvider($entity['destinationId'], $checkin, $checkout, $adults)
                     ];
                 }
@@ -68,7 +69,7 @@ class HotelsComAdapter implements AdapterInterface
 
         $parse = $parsed[1] ?? '';
 
-        $hotel[0] = [
+        $hotel['hotelscom'] = [
             'provider' => 'hotelscom',
             'total_price' => intval(str_replace(".","",$parse)) ?? 0,
             'url' =>  sprintf('https://tr.hotels.com/ho%d/?q-check-in=%s&q-check-out=%s&q-room-0-adults=%d',
@@ -82,7 +83,7 @@ class HotelsComAdapter implements AdapterInterface
     {
             $response = Http::withHeaders([
                 'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
-                'x-rapidapi-key' => self::HOTELS_KEY
+                'x-rapidapi-key' => LocationSearchController::KEY
             ])->get('https://hotels-com-provider.p.rapidapi.com/v1/hotels/booking-details', [
                 'currency' => 'EUR',
                 'locale' => 'en_US',
@@ -93,5 +94,22 @@ class HotelsComAdapter implements AdapterInterface
             ]);
 
             return $this->mapHotel($response->json(),$checkin,$checkout,$adults);
+    }
+
+    public function getImage($destId)
+    {
+            $response = Http::withHeaders([
+                'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
+                'x-rapidapi-key' => LocationSearchController::KEY
+            ])->get('https://hotels-com-provider.p.rapidapi.com/v1/hotels/photos', [
+                'hotel_id' => $destId,
+
+            ]);
+
+            return $this->mapImage($response->json());
+    }
+
+    public function mapImage(array $response) {
+        return $response[0]['mainUrl'] ?? '';
     }
 }
