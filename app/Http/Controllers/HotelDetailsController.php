@@ -11,9 +11,9 @@ class HotelDetailsController extends Controller
     public function hotelDetailAction(Request $request, $hotelsDestinationId, $bookingDestId)
     {
         $hashUri = hash("md5", $request->getUri());
-        if(file_exists($_SERVER['DOCUMENT_ROOT']."/".$hashUri.".json")) {
-            $string = file_get_contents($_SERVER['DOCUMENT_ROOT']."/".$hashUri.".json");
-            return response()->json(json_decode($string,true));
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json")) {
+            $string = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json");
+            return response()->json(json_decode($string, true));
         }
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'hotels4.p.rapidapi.com',
@@ -66,10 +66,21 @@ class HotelDetailsController extends Controller
                 'author' => $rev['author']['name']
             ];
         }
-        if($res != []) {
+        if ($res != []) {
             file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json", json_encode($res));
         }
 
         return response()->json($res);
+    }
+
+    public function getListAction()
+    {
+        return response()->json([
+            'ibis Amsterdam Centre' => [1 => 130948, 2 => 10422],
+            'ibis Schiphol Amsterdam Airport' => [1 => 194310, 2 => 10445],
+            'ibis Amsterdam Centre Stopera' => [1 => 175636, 2 => 10423],
+            'Cityden Amsterdam West' => [1 => 1435395424, 2 => 5839696],
+            'Room Mate Aitana' => [1 => 437565, 2 => 542088]
+        ]);
     }
 }

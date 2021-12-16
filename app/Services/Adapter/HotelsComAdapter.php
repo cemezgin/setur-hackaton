@@ -69,6 +69,7 @@ class HotelsComAdapter implements AdapterInterface
 
         $parse = $parsed[1] ?? '';
         $hotel['hotelscom'] = [
+            'rate' => $response['reviews']['brands']['rating'],
             'provider' => 'hotelscom',
             'total_price' => round(intval(str_replace(".","",$parse)),2) ?? 0,
             'url' =>  sprintf('https://tr.hotels.com/ho%d/?q-check-in=%s&q-check-out=%s&q-room-0-adults=%d',
