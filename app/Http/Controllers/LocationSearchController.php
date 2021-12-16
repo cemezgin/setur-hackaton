@@ -6,7 +6,6 @@ use App\Services\Adapter\BookingComAdapter;
 use App\Services\Adapter\HotelsComAdapter;
 use App\Services\PriceSelector;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\fileExists;
 
 class LocationSearchController extends Controller
 {

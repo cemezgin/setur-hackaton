@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Http;
 class BookingComAdapter implements AdapterInterface
 {
     private $response;
-    private $destinationId;
+
+    const BOOKING_KEY = '593306b5d1mshdb24b1868312486p10efaejsne3c42c137c35';
 
     public function locationAPIProvider(string $searchQuery, $checkin, $checkout, $adults): array
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => 'd5f1d1627amshd9a9747193e87c5p16a106jsne6b39caf8449'
+            'x-rapidapi-key' => self::BOOKING_KEY
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/locations', [
             'locale' => 'en-gb',
             'name' => $searchQuery,
@@ -81,7 +82,7 @@ class BookingComAdapter implements AdapterInterface
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => 'd5f1d1627amshd9a9747193e87c5p16a106jsne6b39caf8449'
+            'x-rapidapi-key' => self::BOOKING_KEY
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/search', [
             'units' => 'metric',
             'order_by' => 'popularity',

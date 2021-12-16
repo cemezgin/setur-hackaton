@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Http;
 class HotelsComAdapter implements AdapterInterface
 {
     private $response;
-
+    const HOTELS_KEY = '593306b5d1mshdb24b1868312486p10efaejsne3c42c137c35';
     public function locationAPIProvider(string $searchQuery, $checkin, $checkout, $adults)
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
-            'x-rapidapi-key' => 'd5f1d1627amshd9a9747193e87c5p16a106jsne6b39caf8449'
+            'x-rapidapi-key' => self::HOTELS_KEY
         ])->get('https://hotels-com-provider.p.rapidapi.com/v1/destinations/search', [
             'locale' => 'en_US',
             'currency' => 'EUR',
@@ -86,7 +86,7 @@ class HotelsComAdapter implements AdapterInterface
     {
             $response = Http::withHeaders([
                 'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
-                'x-rapidapi-key' => 'd5f1d1627amshd9a9747193e87c5p16a106jsne6b39caf8449'
+                'x-rapidapi-key' => self::HOTELS_KEY
             ])->get('https://hotels-com-provider.p.rapidapi.com/v1/hotels/booking-details', [
                 'currency' => 'EUR',
                 'locale' => 'en_US',
