@@ -60,7 +60,7 @@ class HotelsComAdapter implements AdapterInterface
         return $hotels;
     }
 
-    private function mapHotel(array $response)
+    private function mapHotel(array $response,$checkin,$checkout,$adults)
     {
 //        $lat = round($response['header']['hotelLocation']['coordinates']['latitude'], 2);
 //        $long = round($response['header']['hotelLocation']['coordinates']['longitude'], 2);
@@ -76,7 +76,9 @@ class HotelsComAdapter implements AdapterInterface
                 'value' => $response['featuredPrice']['currentPrice']['plain'] ?? '',
                 'currency' => 'EUR'
                 ],
-            'total_price' => intval(str_replace(".","",$parse)) ?? 0
+            'total_price' => intval(str_replace(".","",$parse)) ?? 0,
+            'url' =>  sprintf('https://tr.hotels.com/ho%d/?q-check-in=%s&q-check-out=%s&q-room-0-adults=%d',
+        $response['header']['hotelId'],$checkin,$checkout,$adults),
         ];
 
         return $hotel;
@@ -96,6 +98,6 @@ class HotelsComAdapter implements AdapterInterface
                 'adults_number' => $adults,
             ]);
 
-            return $this->mapHotel($response->json());
+            return $this->mapHotel($response->json(),$checkin,$checkout,$adults);
     }
 }

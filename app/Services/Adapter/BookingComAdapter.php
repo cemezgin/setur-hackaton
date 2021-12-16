@@ -28,7 +28,7 @@ class BookingComAdapter implements AdapterInterface
         }
     }
 
-    private function mapHotel(array $response)
+    private function mapHotel(array $response, $checkin, $checkout, $adults)
     {
 //        $lat = round($response['header']['hotelLocation']['coordinates']['latitude'], 2);
 //        $long = round($response['header']['hotelLocation']['coordinates']['longitude'], 2);
@@ -48,7 +48,8 @@ class BookingComAdapter implements AdapterInterface
 
         $hotel['bookingcom'] = [
             'total_price' => $price,
-            'daily_price' => $daily
+            'daily_price' => $daily,
+            'url' => sprintf("%s?checkin=%s&checkout=%s&req_adults=%s",$response['result'][0]['url'],$checkin,$checkout,$adults)
         ];
 
         return $hotel;
@@ -99,7 +100,7 @@ class BookingComAdapter implements AdapterInterface
         if ($response->failed()) {
             return $response->json();
         } else {
-            return $this->mapHotel($response->json());
+            return $this->mapHotel($response->json(), $checkin, $checkout, $adults);
         }
 
     }
