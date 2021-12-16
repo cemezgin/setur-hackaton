@@ -30,25 +30,17 @@ class BookingComAdapter implements AdapterInterface
 
     private function mapHotel(array $response, $checkin, $checkout, $adults)
     {
-//        $lat = round($response['header']['hotelLocation']['coordinates']['latitude'], 2);
-//        $long = round($response['header']['hotelLocation']['coordinates']['longitude'], 2);
-//        $hash = hash("md5" , $lat . $long);
-        $daily = '';
         $price = $response['result'][0]['min_total_price'] ?? '';
         if (isset($response['result'][0]['composite_price_breakdown'])) {
             $priceField = $response['result'][0]['composite_price_breakdown'];
             if(isset($priceField['discounted_amount'])) {
                 $price = $priceField['discounted_amount'];
             }
-
-            if(isset($priceField['gross_amount_per_night'])) {
-                $daily = $priceField['gross_amount_per_night'];
-            }
         }
 
-        $hotel['bookingcom'] = [
+        $hotel[0]= [
+            'provider' => 'bookingcom',
             'total_price' => $price,
-            'daily_price' => $daily,
             'url' => sprintf("%s?checkin=%s&checkout=%s&req_adults=%s",$response['result'][0]['url'],$checkin,$checkout,$adults)
         ];
 

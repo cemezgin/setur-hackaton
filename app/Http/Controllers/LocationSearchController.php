@@ -31,11 +31,11 @@ class LocationSearchController extends Controller
         foreach ($res as $key => $item) {
             if (isset($item['detail'])) {
                 $bestOldPrice = 100000000;
-                foreach ($item['detail'] as $provider => $priceItem) {
+                foreach ($item['detail'] as $priceItem) {
                     $bestPrice = $priceItem['total_price'];
                     if ($bestPrice < $bestOldPrice) {
                         $bestOldPrice = $bestPrice;
-                        $selected = $provider;
+                        $selected = $priceItem['provider'];
                     }
                     $prc = [
                         'price' => $bestOldPrice,

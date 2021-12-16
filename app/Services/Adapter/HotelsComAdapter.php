@@ -62,20 +62,14 @@ class HotelsComAdapter implements AdapterInterface
 
     private function mapHotel(array $response,$checkin,$checkout,$adults)
     {
-//        $lat = round($response['header']['hotelLocation']['coordinates']['latitude'], 2);
-//        $long = round($response['header']['hotelLocation']['coordinates']['longitude'], 2);
-//        $hash = hash("md5" , $lat . $long);
         $parsed = isset($response['featuredPrice']['fullyBundledPricePerStay']) ?
             explode(" ", $response['featuredPrice']['fullyBundledPricePerStay']) :
         '0';
 
         $parse = $parsed[1] ?? '';
 
-        $hotel['hotelscom'] = [
-            'daily_price' => [
-                'value' => $response['featuredPrice']['currentPrice']['plain'] ?? '',
-                'currency' => 'EUR'
-                ],
+        $hotel[0] = [
+            'provider' => 'hotelscom',
             'total_price' => intval(str_replace(".","",$parse)) ?? 0,
             'url' =>  sprintf('https://tr.hotels.com/ho%d/?q-check-in=%s&q-check-out=%s&q-room-0-adults=%d',
         $response['header']['hotelId'],$checkin,$checkout,$adults),
