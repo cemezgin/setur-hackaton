@@ -38,6 +38,7 @@ class BookingComAdapter implements AdapterInterface
             }
         }
 
+        $price = isset($price['value']) ? $price['value'] : $price;
         $hotel[0]= [
             'provider' => 'bookingcom',
             'total_price' => $price,
