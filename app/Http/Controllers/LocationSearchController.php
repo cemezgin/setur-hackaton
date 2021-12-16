@@ -55,6 +55,7 @@ class LocationSearchController extends Controller
                 }
 
                 unset($res[$key]['detail'][0]);
+                rsort($res[$key]['detail']);
             }
         }
         if($res != []) {
