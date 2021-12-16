@@ -94,7 +94,6 @@ class HotelsComAdapter implements AdapterInterface
                 'checkin_date' => $checkin,
                 'checkout_date' => $checkout,
                 'adults_number' => $adults,
-//            'children_ages' => 0,0
             ]);
 
             return $this->mapHotel($response->json());

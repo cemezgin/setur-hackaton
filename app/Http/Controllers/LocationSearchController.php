@@ -46,8 +46,9 @@ class LocationSearchController extends Controller
                 array_push($res[$key], $prc);
             }
         }
-
-        file_put_contents($_SERVER['DOCUMENT_ROOT']."/".$hashUri.".json",json_encode($res));
+        if($res != []) {
+            file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json", json_encode($res));
+        }
         return response()->json($res);
     }
 }
