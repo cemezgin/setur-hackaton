@@ -40,7 +40,7 @@ class BookingComAdapter implements AdapterInterface
         $price = isset($price['value']) ? $price['value'] : $price;
         $hotel['bookingcom']= [
             'provider' => 'bookingcom',
-            'total_price' => $price,
+            'total_price' => round($price,2),
             'url' => sprintf("%s?checkin=%s&checkout=%s&req_adults=%s",$response['result'][0]['url'],$checkin,$checkout,$adults)
         ];
 
