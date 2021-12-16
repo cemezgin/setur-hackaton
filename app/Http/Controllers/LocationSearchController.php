@@ -9,9 +9,15 @@ use Illuminate\Http\Request;
 
 class LocationSearchController extends Controller
 {
-    public const KEY = '7a611efc65msh8772606504dfc89p113280jsn2592cdb0aabe';
+    public const KEY = '4422661868msh85c52f6815a4b69p190e30jsnb525ff27e538';
     public function locationSearchAction(Request $request)
     {
+        $flag = true;
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/old_bookings_track.json")) {
+            $oldTrack = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/old_bookings_track.json");
+            $oldBooking = json_decode($oldTrack, true);
+        }
+
         $providers = [
             'bookingcom' => BookingComAdapter::class,
             'hotelscom' => HotelsComAdapter::class,
@@ -46,6 +52,13 @@ class LocationSearchController extends Controller
 
                 array_push($res[$key]['detail'], $prc);
                 foreach ($res[$key]['detail'] as $prov => $priceDetail) {
+                    $name = is_array($res[$key]['name']) ? $res[$key]['name'][0] : $res[$key]['name'];
+
+                    if(isset($oldBooking[0][1][$prov]) && $oldBooking[0][1][$prov]['hotelName'] == $name) {
+                        $res[$key]['detail'][$prov]['repeat'] = true;
+                        $flag = false;
+                    }
+
                     if ($prov != "0") {
                        if($prov == $res[$key]['detail'][0]['provider']) {
                            $res[$key]['detail'][$prov]['best'] = true;
@@ -58,7 +71,7 @@ class LocationSearchController extends Controller
                 rsort($res[$key]['detail']);
             }
         }
-        if($res != []) {
+        if($res != [] && $flag) {
             file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json", json_encode($res));
         }
         return response()->json($res);
