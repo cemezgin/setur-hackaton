@@ -17,7 +17,9 @@ class HotelListController extends Controller
         }
 
         $matches = preg_grep(sprintf('/\\b%s?\\b/i', $string), $res);
-        $keys = array_keys($matches);
+        foreach ( $matches as $match) {
+            $keys[] = ['value' =>  $match, 'label' => $match];
+        }
 
         return response()->json($keys);
     }
