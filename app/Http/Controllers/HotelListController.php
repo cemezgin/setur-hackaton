@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 class HotelListController extends Controller
 {
-    public function hotelList()
+    public function hotelList($string)
     {
         $content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/otel_feature.csv");
         $data = str_getcsv($content, "\n");
@@ -16,7 +16,10 @@ class HotelListController extends Controller
             $res[$datum[1]] = $datum[1];
         }
 
-        return response()->json($res);
+        $matches = preg_grep(sprintf('/\\b%s?\\b/i', $string), $res);
+        $keys = array_keys($matches);
+
+        return response()->json($keys);
     }
 
 }

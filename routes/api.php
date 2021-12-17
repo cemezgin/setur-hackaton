@@ -26,4 +26,4 @@ Route::get('location', [LocationSearchController::class, 'locationSearchAction']
 Route::get('hotel/{destinationId}/{bookingId}', [HotelDetailsController::class, 'hotelDetailAction']);
 Route::get('hotel-list-compare', [HotelDetailsController::class, 'getListAction']);
 Route::get('booking', [BookingController::class, 'bookingTrack']);
-Route::get('hotels', [HotelListController::class, 'hotelList']);
+Route::get('hotels/{string}', [HotelListController::class, 'hotelList']);
