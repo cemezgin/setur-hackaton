@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class LocationSearchController extends Controller
 {
-    public const KEY = '4422661868msh85c52f6815a4b69p190e30jsnb525ff27e538';
+    public const KEY = 'f58e449a17mshf4ab670d9a877a5p1c6184jsn94a580d41ffa';
     public function locationSearchAction(Request $request)
     {
         $flag = true;
