@@ -83,4 +83,37 @@ class HotelDetailsController extends Controller
             'Room Mate Aitana' => [1 => 437565, 2 => 542088]
         ]);
     }
+
+    public function getReview(Request $request, $bookingDestId) {
+        $hashUri = hash("md5", $request->getUri());
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json")) {
+            $string = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json");
+            return response()->json(json_decode($string, true));
+        }
+
+        $review = Http::withHeaders([
+            'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
+            'x-rapidapi-key' => LocationSearchController::KEY
+        ])->get('https://booking-com.p.rapidapi.com/v1/hotels/reviews', [
+            'sort_type' => 'SORT_MOST_RELEVANT',
+            'locale' => 'en-gb',
+            'language_filter' => 'en-gb',
+            'hotel_id' => $bookingDestId,
+        ]);
+
+        foreach ($review['result'] as $rev) {
+            $res['review'][] = [
+                'pros' => $rev['pros'],
+                'cons' => $rev['cons'],
+                'average_score' => $rev['average_score'],
+                'author' => $rev['author']['name']
+            ];
+        }
+
+        if ($res != []) {
+            file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json", json_encode($res));
+        }
+
+        return response()->json($res);
+    }
 }
