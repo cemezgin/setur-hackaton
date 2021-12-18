@@ -81,6 +81,6 @@ class LocationSearchController extends Controller
         if($res != [] && $flag) {
             file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json", json_encode($res));
         }
-        return response()->json($res);
+        return response()->json($res['reviews']);
     }
 }
