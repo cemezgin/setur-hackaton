@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Adapter\BookingComAdapter;
 use App\Services\Adapter\HotelsComAdapter;
+use App\Services\Adapter\InternalProviderAdapter;
 use App\Services\PriceSelector;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,7 @@ class LocationSearchController extends Controller
         $providers = [
             'bookingcom' => BookingComAdapter::class,
             'hotelscom' => HotelsComAdapter::class,
+            'setur' => InternalProviderAdapter::class
         ];
         $hashUri = hash("md5", $request->getUri());
         if(file_exists($_SERVER['DOCUMENT_ROOT']."/".$hashUri.".json")) {
@@ -34,23 +36,27 @@ class LocationSearchController extends Controller
             $locationList[$name] = $result;
         }
 
-        $res = array_merge_recursive($locationList['bookingcom'], $locationList['hotelscom']);
+        $res = array_merge_recursive($locationList['bookingcom'], $locationList['hotelscom'], $locationList['setur']);
         foreach ($res as $key => $item) {
             if (isset($item['detail'])) {
                 $bestOldPrice = 100000000;
+                $selected = '';
                 foreach ($item['detail'] as $priceItem) {
-                    $bestPrice = $priceItem['total_price'];
-                    if ($bestPrice < $bestOldPrice) {
+                    $bestPrice = $priceItem['total_price'] ?? $bestOldPrice;
+                    if ($bestPrice <= $bestOldPrice) {
                         $bestOldPrice = $bestPrice;
                         $selected = $priceItem['provider'];
                     }
+
                     $prc = [
-                        'price' => $bestOldPrice,
-                        'provider' => $selected
+                        'total_price' => $bestOldPrice,
+                        'provider' => $selected == '' ?  $priceItem['provider'] : $selected,
+                        'url' => $priceItem['url'],
+                        'rate' => $priceItem['rate']
                     ];
                 }
+                    array_push($res[$key]['detail'], $prc);
 
-                array_push($res[$key]['detail'], $prc);
                 foreach ($res[$key]['detail'] as $prov => $priceDetail) {
                     $name = is_array($res[$key]['name']) ? $res[$key]['name'][0] : $res[$key]['name'];
 

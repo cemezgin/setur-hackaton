@@ -34,7 +34,7 @@ class HotelsComAdapter implements AdapterInterface
         foreach ($decoded['suggestions'] as $item) {
             if ($item['group'] == 'HOTEL_GROUP') {
                 foreach ($item['entities'] as $entity) {
-                    $hash = hash("md5", round($entity['latitude'], 2) . round($entity['longitude'], 2));
+                    $hash = md5(round($entity['latitude'], 2) . round($entity['longitude'], 2));
 
                     $caption = strip_tags($entity['caption']);
                     $location = explode(',', $caption);
@@ -69,7 +69,7 @@ class HotelsComAdapter implements AdapterInterface
 
         $parse = $parsed[1] ?? '';
         $hotel['hotelscom'] = [
-            'rate' => $response['reviews']['brands']['rating'],
+            'rate' => $response['reviews']['brands']['rating'] ?? 5,
             'provider' => 'hotelscom',
             'total_price' => round(intval(str_replace(".","",$parse)),2) ?? 0,
             'url' =>  sprintf('https://tr.hotels.com/ho%d/?q-check-in=%s&q-check-out=%s&q-room-0-adults=%d',

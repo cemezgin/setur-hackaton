@@ -54,7 +54,7 @@ class BookingComAdapter implements AdapterInterface
         $decoded = $this->response->json();
         foreach ($decoded as $item) {
             if ($item['dest_type'] == 'hotel') {
-                $hash = hash("md5", round($item['latitude'], 2) . round($item['longitude'], 2));
+                $hash = md5( round($item['latitude'], 2) . round($item['longitude'], 2));
                 $hotels[$hash] = [
                     'name' => $item['name'],
                     'region' => $item['region'],
@@ -89,7 +89,6 @@ class BookingComAdapter implements AdapterInterface
             'adults_number' => $adults,
             'room_number' => $room
         ]);
-
         if ($response->failed()) {
             return $response->json();
         } else {
