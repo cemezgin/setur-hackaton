@@ -105,7 +105,7 @@ class HotelDetailsController extends Controller
             $res['review'][] = [
                 'pros' => $rev['pros'],
                 'cons' => $rev['cons'],
-                'average_score' => $rev['average_score'],
+                'average_score' => round($rev['average_score'],1),
                 'author' => $rev['author']['name']
             ];
 
