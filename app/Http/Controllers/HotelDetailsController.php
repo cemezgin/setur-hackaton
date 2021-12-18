@@ -17,7 +17,7 @@ class HotelDetailsController extends Controller
         }
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'hotels4.p.rapidapi.com',
-            'x-rapidapi-key' => LocationSearchController::KEY
+            'x-rapidapi-key' => env("RAPID_KEY")
         ])->get('https://hotels4.p.rapidapi.com/properties/get-details', [
             'currency' => 'EUR',
             'locale' => 'en_US',
@@ -48,7 +48,7 @@ class HotelDetailsController extends Controller
 
         $reviewResp = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => LocationSearchController::KEY
+            'x-rapidapi-key' => env("RAPID_KEY")
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/reviews', [
             'sort_type' => 'SORT_MOST_RELEVANT',
             'locale' => 'en-gb',
@@ -93,7 +93,7 @@ class HotelDetailsController extends Controller
 
         $review = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => LocationSearchController::KEY
+            'x-rapidapi-key' => env("RAPID_KEY")
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/reviews', [
             'sort_type' => 'SORT_MOST_RELEVANT',
             'locale' => 'en-gb',

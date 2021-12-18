@@ -2,7 +2,6 @@
 
 namespace App\Services\Adapter;
 
-use App\Http\Controllers\LocationSearchController;
 use Illuminate\Support\Facades\Http;
 
 class HotelsComAdapter implements AdapterInterface
@@ -12,7 +11,7 @@ class HotelsComAdapter implements AdapterInterface
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
-            'x-rapidapi-key' => LocationSearchController::KEY
+            'x-rapidapi-key' => env("RAPID_KEY")
         ])->get('https://hotels-com-provider.p.rapidapi.com/v1/destinations/search', [
             'locale' => 'en_US',
             'currency' => 'EUR',
@@ -83,7 +82,7 @@ class HotelsComAdapter implements AdapterInterface
     {
             $response = Http::withHeaders([
                 'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
-                'x-rapidapi-key' => LocationSearchController::KEY
+                'x-rapidapi-key' => env("RAPID_KEY")
             ])->get('https://hotels-com-provider.p.rapidapi.com/v1/hotels/booking-details', [
                 'currency' => 'EUR',
                 'locale' => 'en_US',
@@ -100,7 +99,7 @@ class HotelsComAdapter implements AdapterInterface
     {
             $response = Http::withHeaders([
                 'x-rapidapi-host' => 'hotels-com-provider.p.rapidapi.com',
-                'x-rapidapi-key' => LocationSearchController::KEY
+                'x-rapidapi-key' => env("RAPID_KEY")
             ])->get('https://hotels-com-provider.p.rapidapi.com/v1/hotels/photos', [
                 'hotel_id' => $destId,
 

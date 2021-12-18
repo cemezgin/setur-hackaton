@@ -2,7 +2,6 @@
 
 namespace App\Services\Adapter;
 
-use App\Http\Controllers\LocationSearchController;
 use Illuminate\Support\Facades\Http;
 
 class BookingComAdapter implements AdapterInterface
@@ -13,7 +12,7 @@ class BookingComAdapter implements AdapterInterface
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => LocationSearchController::KEY
+            'x-rapidapi-key' => env("RAPID_KEY")
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/locations', [
             'locale' => 'en-gb',
             'name' => $searchQuery,
@@ -76,7 +75,7 @@ class BookingComAdapter implements AdapterInterface
     {
         $response = Http::withHeaders([
             'x-rapidapi-host' => 'booking-com.p.rapidapi.com',
-            'x-rapidapi-key' => LocationSearchController::KEY
+            'x-rapidapi-key' => env("RAPID_KEY")
         ])->get('https://booking-com.p.rapidapi.com/v1/hotels/search', [
             'units' => 'metric',
             'order_by' => 'popularity',
