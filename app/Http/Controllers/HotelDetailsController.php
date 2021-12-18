@@ -101,13 +101,21 @@ class HotelDetailsController extends Controller
             'hotel_id' => $bookingDestId,
         ]);
 
-        foreach ($review['result'] as $rev) {
+        foreach ($review['result'] as $key => $rev) {
             $res['review'][] = [
                 'pros' => $rev['pros'],
                 'cons' => $rev['cons'],
                 'average_score' => $rev['average_score'],
                 'author' => $rev['author']['name']
             ];
+
+            if ($key == 1) {
+                if ($res != []) {
+                    file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/" . $hashUri . ".json", json_encode($res));
+                }
+
+                return response()->json($res);
+            }
         }
 
         if ($res != []) {
